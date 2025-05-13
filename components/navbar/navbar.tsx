@@ -9,7 +9,7 @@ export default function Navbar() {
       <ul className="space-y-1">
         <li>
           <Link
-            href="/main"
+            href="/dashboard"
             className="block hover:bg-[#ffffff28] rounded text-xl font-bold p-2 transition"
           >
             Dashboard
@@ -17,7 +17,7 @@ export default function Navbar() {
         </li>
         <li>
           <Link
-            href="/main"
+            href="/transactions"
             className="block hover:bg-[#ffffff28] rounded text-xl font-bold p-2 transition"
           >
             Transactions
@@ -25,7 +25,7 @@ export default function Navbar() {
         </li>
         <li>
           <Link
-            href="/main"
+            href="/profile"
             className="block hover:bg-[#ffffff28] rounded text-xl font-bold p-2 transition"
           >
             Profile
