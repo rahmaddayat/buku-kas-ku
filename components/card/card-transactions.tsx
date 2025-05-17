@@ -14,7 +14,7 @@ const TransCard: FC<TransCardProps> = ({
   status,
 }) => {
   return (
-    <div className="text-black bg-white shadow rounded-xl p-6 ml-10 mr-10 mt-5 flex flex-row">
+    <div className="text-black bg-white rounded-lg shadow-md hover:shadow-xl hover:scale-100 transition duration-300s p-6 ml-10 mr-10 mt-5 flex flex-row">
       <div className="grid grid-cols-[5fr_1fr] items-center h-full w-full">
         <div>
           <div className="flex items-center gap-2">
@@ -44,11 +44,11 @@ const TransCard: FC<TransCardProps> = ({
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <button>
-            <i className="fas fa-edit"></i> Edit
+          <button className="border border-blue-700 rounded shadow-md hover:scale-105 transition duration-50 bg-blue-500 text-white">
+            Edit
           </button>
-          <button>
-            <i className="fas fa-trash-alt"></i> Delete
+          <button className="border border-red-800 rounded shadow-md  hover:scale-105 transition duration-50 bg-red-600 text-white">
+            Delete
           </button>
         </div>
       </div>
