@@ -20,7 +20,7 @@ export default function MainPage() {
               <ul className="text-black font-bold text-lg md:text-2xl">
                 <li className="mb-2 mt-2">User Name : </li>
                 <li className="mb-2 mt-2">Email : </li>
-                <li className="mb-2 mt-2">Total Saldo : </li>
+                <li className="mb-2 mt-2">Created At : </li>
               </ul>
               <button className="mt-2 border border-red-700 bg-red-600 rounded px-4 py-2 font-bold shadow-md hover:shadow-xl hover:scale-105 transition duration-300 text-white">
                 Log Out

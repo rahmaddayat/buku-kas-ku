@@ -3,10 +3,48 @@ import Navbar from "@/components/navbar/navbar";
 import Card from "@/components/card/card";
 import Header from "@/components/header/header";
 import ExpensesGraph from "@/components/expenses-graph/graph";
-import { useState } from "react";
+import InputTrans from "@/components/Modal/addTransaction";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+type sumDataType = {
+  balance: number;
+  income: number;
+  expense: number;
+};
 
 export default function MainPage() {
-  const [nominal, setNominal] = useState<any>([0, 0, 0]);
+  const [popup, setPopup] = useState(false);
+  const [sumData, setSumData] = useState({ balance: 0, income: 0, expense: 0 });
+
+  const showModal = () => {
+    if (popup) {
+      setPopup(false);
+    } else {
+      setPopup(true);
+    }
+  };
+
+  useEffect(() => {
+    const getTransactionSum = async () => {
+      try {
+        const response = await axios.get<sumDataType>(
+          "https://buku-kas-ku-api.vercel.app/api/transaction/summary",
+          {
+            headers: {
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODI4NGVhNDcyNjA5ZTYyMTAwNDAzMjYiLCJpYXQiOjE3NDc0NzIxMzd9.h_KYQCMUqeJAszCkuvyQ5E3evTIc1YMPAvVl6DR1mOw",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        setSumData(response.data);
+      } catch (error: any) {}
+    };
+
+    getTransactionSum();
+  }, []);
 
   return (
     <div className="flex">
@@ -15,9 +53,9 @@ export default function MainPage() {
         <Header title="Finance Dashboard" />
         <main className="flex-1 p-8 flex flex-col">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <Card title="Total Balance" nominal={nominal[0]} />
-            <Card title="Income" nominal={nominal[1]} />
-            <Card title="Expenses" nominal={nominal[2]} />
+            <Card title="Total Balance" nominal={sumData.balance} />
+            <Card title="Income" nominal={sumData.income} />
+            <Card title="Expenses" nominal={sumData.expense} />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 min-h-0">
@@ -28,13 +66,30 @@ export default function MainPage() {
               <div className="bg-white border-2 border-[#103b4d] shadow p-4 rounded flex items-center justify-center">
                 Content Atas
               </div>
-              <button className="bg-[#103b4d] font-bold p-4 rounded flex items-center justify-center shadow-md hover:scale-102 transition duration-50">
+              <button
+                onClick={showModal}
+                className="bg-[#103b4d] font-bold p-4 rounded flex items-center justify-center shadow-md hover:scale-102 transition duration-50"
+              >
                 + Add Transaction
               </button>
             </div>
           </div>
         </main>
       </div>
+      {popup ? (
+        <>
+          <InputTrans
+            amount={10000}
+            type="income"
+            category="Gaji"
+            date="17-05-2025"
+            description="none"
+          />
+          <button onClick={showModal} className="fixed z-110 top-10 right-10">
+            Close
+          </button>
+        </>
+      ) : null}
     </div>
   );
 }
