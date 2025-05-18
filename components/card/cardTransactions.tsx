@@ -4,20 +4,24 @@ import { FC } from "react";
 import { useState } from "react";
 import TransactionHandler from "../balance/handleTransaction";
 
-type TransCardProps = {
+type TransCardType = {
     elementId: string;
     nominal: number;
     description: string;
     date: Date | string;
     status: boolean | string;
+    category: string;
+    type: string;
 };
 
-const TransCard: FC<TransCardProps> = ({
+const TransCard: FC<TransCardType> = ({
     elementId,
     nominal,
     description,
     date,
     status,
+    category,
+    type,
 }) => {
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupType, setPopupType] = useState<"edit" | "delete" | null>(null);
@@ -39,6 +43,11 @@ const TransCard: FC<TransCardProps> = ({
                     eventType={popupType}
                     onClick={closePopup}
                     elementId={elementId}
+                    inputAmount={nominal}
+                    inputCategory={category}
+                    inputDate={date}
+                    inputDescription={description}
+                    inputType={type}
                 />
             )}
             <div className="text-black bg-white rounded-lg shadow-md hover:shadow-xl hover:scale-100 transition duration-300s p-6 ml-10 mr-10 mt-5 flex flex-row">
@@ -48,7 +57,9 @@ const TransCard: FC<TransCardProps> = ({
                             {typeof status == "boolean" && (
                                 <span
                                     className={`text-2xl font-bold ${
-                                        status ? `text-green-500` : `text-red-600`
+                                        status
+                                            ? `text-green-500`
+                                            : `text-red-600`
                                     }`}
                                 >
                                     {status ? "+ " : "- "}
@@ -61,23 +72,32 @@ const TransCard: FC<TransCardProps> = ({
                             >
                                 {nominal === 0
                                     ? "Loading"
-                                    : `Rp${nominal.toLocaleString("id-ID")}`}
+                                    : `Rp${nominal.toLocaleString(
+                                          "id-ID"
+                                      )} (${category})`}
                             </h1>
                         </div>
                         <p className="text-gray-600">{description}</p>
                         <div className="text-m font-bold text-gray-500">
                             {(() => {
-                                const rawDate: string | Date = date;
-                                const parsedDate =
-                                    typeof rawDate === "string"
-                                        ? new Date(rawDate)
-                                        : rawDate;
+                                try {
+                                    const rawDate: string | Date = date;
+                                    const parsedDate =
+                                        typeof rawDate === "string"
+                                            ? new Date(rawDate)
+                                            : rawDate;
 
-                                return parsedDate.toLocaleDateString("id-ID", {
-                                    day: "numeric",
-                                    month: "long",
-                                    year: "numeric",
-                                });
+                                    return parsedDate.toLocaleDateString(
+                                        "id-ID",
+                                        {
+                                            day: "numeric",
+                                            month: "long",
+                                            year: "numeric",
+                                        }
+                                    );
+                                } catch {
+                                    return "";
+                                }
                             })()}
                         </div>
                     </div>

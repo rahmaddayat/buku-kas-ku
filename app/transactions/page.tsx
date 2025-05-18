@@ -77,6 +77,8 @@ export default function TransactionsPage() {
                 description={txn.description}
                 date={txn.date}
                 status={txn.type === "income"}
+                category={txn.category}
+                type={txn.type}
             />
         ));
     };
@@ -123,7 +125,7 @@ export default function TransactionsPage() {
                 {transactions.length > 0 ? (
                     <ShowTransactions />
                 ) : (
-                    <p className="text-center text-gray-500 p-4">Loading</p>
+                    <p className="text-center text-gray-500 p-4">Tidak ada transaksi</p>
                 )}
             </div>
         </div>

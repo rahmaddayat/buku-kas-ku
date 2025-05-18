@@ -1,9 +1,8 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 
 type inputTrans = {
     amount: number;
@@ -17,10 +16,20 @@ export default function TransactionHandler({
     elementId,
     onClick,
     eventType,
+    inputAmount,
+    inputType,
+    inputCategory,
+    inputDate,
+    inputDescription,
 }: {
     elementId?: string;
     onClick: any;
     eventType: string;
+    inputAmount?: number;
+    inputType?: string;
+    inputCategory?: string;
+    inputDate?: Date | string;
+    inputDescription?: string;
 }) {
     const [formData, setFormData] = useState({
         amount: 0,
@@ -29,8 +38,7 @@ export default function TransactionHandler({
         date: "",
         description: "",
     });
-
-    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
 
     const userToken = localStorage.getItem("token");
 
@@ -39,6 +47,8 @@ export default function TransactionHandler({
 
         if (userToken) {
             try {
+                setIsLoading(true);
+
                 if (eventType === "add") {
                     if (
                         !formData.amount ||
@@ -63,7 +73,7 @@ export default function TransactionHandler({
                         }
                     );
 
-                    alert("Transaksi berhasil ditambah");
+                    window.location.reload();
                 } else if (eventType === "edit") {
                     if (
                         !formData.amount ||
@@ -72,7 +82,7 @@ export default function TransactionHandler({
                         !formData.description ||
                         !formData.type
                     ) {
-                        alert("Form tidak.");
+                        alert("Form tidak boleh kosong.");
                     }
 
                     formData.date = formData.date.replace("/", "-");
@@ -88,9 +98,7 @@ export default function TransactionHandler({
                         }
                     );
 
-                    alert("Transaksi berhasil diedit");
-
-                    router.push("/transactions");
+                    window.location.reload();
                 } else {
                     const response = await axios.delete(
                         `https://buku-kas-ku-api.vercel.app/api/transaction/${elementId}`,
@@ -104,7 +112,7 @@ export default function TransactionHandler({
 
                     alert(response.data.message);
 
-                    router.push("/transactions");
+                    window.location.reload();
                 }
             } catch (error: any) {
                 const message =
@@ -112,6 +120,8 @@ export default function TransactionHandler({
                     "Gagal menambahkan transaksi.";
 
                 alert(message);
+            } finally {
+                setIsLoading(false);
             }
         }
     };
@@ -124,6 +134,31 @@ export default function TransactionHandler({
         setFormData({ ...formData, type: "expense" });
     };
 
+    const onSelect = (e: any) => {
+        setFormData({ ...formData, category: e.target.textContent });
+    };
+
+    useEffect(() => {
+        if (eventType == "edit") {
+            if (
+                inputAmount ||
+                inputCategory ||
+                inputDate ||
+                inputDescription ||
+                inputType
+            ) {
+                setFormData({
+                    ...formData,
+                    type: inputType ? inputType : '',
+                    amount: inputAmount ? inputAmount : 0,
+                    category: inputCategory ? inputCategory : '',
+                    date: inputDate ? inputDate.toString() : '0000-00-00',
+                    description: inputDescription ? inputDescription : '',
+                });
+            }
+        }
+    }, []);
+
     return (
         <>
             <div
@@ -132,18 +167,26 @@ export default function TransactionHandler({
             ></div>
             {eventType === "delete" ? (
                 <div className="z-100 fixed top-[50vh] left-[50vw] gap-4 flex flex-col justify-center items-center translate-x-[-50%] translate-y-[-50%] bg-white rounded-[16px] w-[35%] px-12 py-8">
-                    <p className="text-black text-lg text-center">Apakah anda ingin menghapus transaksi ini?</p>
+                    <p className="text-black text-lg text-center">
+                        Apakah anda ingin menghapus transaksi ini?
+                    </p>
                     <div className="w-full flex flex-row items-center justify-center gap-4">
-                        <button onClick={handleSubmit} className="p-2 flex-grow rounded-lg bg-green-500">
+                        <button
+                            onClick={handleSubmit}
+                            className="p-2 flex-grow rounded-lg bg-green-500"
+                        >
                             Iya
                         </button>
-                        <button onClick={onClick} className="p-2 flex-grow rounded-lg bg-red-500">
+                        <button
+                            onClick={onClick}
+                            className="p-2 flex-grow rounded-lg bg-red-500"
+                        >
                             Tidak
                         </button>
                     </div>
                 </div>
             ) : (
-                <div className="z-100 fixed top-[50vh] left-[50vw] gap-4 flex flex-col justify-center items-center translate-x-[-50%] translate-y-[-50%] bg-white rounded-[16px] w-[50%] px-12 pb-12 pt-8">
+                <div className="z-100 fixed top-[50vh] left-[50vw] gap-4 flex flex-col justify-center items-center translate-x-[-50%] translate-y-[-50%] bg-white rounded-[16px] w-[60%] px-12 pb-12 pt-8">
                     <div className="w-full flex justify-end text-grey-500">
                         <AiOutlineClose
                             size={20}
@@ -158,7 +201,11 @@ export default function TransactionHandler({
                                 <span className="text-lg">Amount</span>
                                 <input
                                     placeholder="Amount"
-                                    value={formData.amount}
+                                    value={
+                                        inputAmount
+                                            ? inputAmount
+                                            : formData.amount
+                                    }
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
@@ -202,24 +249,97 @@ export default function TransactionHandler({
                             </li>
                             <li className="w-full flex items-center justify-between">
                                 <span className="text-lg">Category</span>
-                                <input
-                                    placeholder="Category"
-                                    value={formData.category}
-                                    onChange={(e) =>
-                                        setFormData({
-                                            ...formData,
-                                            category: e.target.value,
-                                        })
-                                    }
-                                    className="rounded-lg border w-[80%] border-black p-2"
-                                    type="text"
-                                />
+                                <div className="flex flex-row gap-4 items-center justify-center w-[80%]">
+                                    <button
+                                        onClick={onSelect}
+                                        className={
+                                            `cursor-pointer text-sm rounded-lg flex-grow border border-blue-700 p-2 ` +
+                                            `${
+                                                formData.category === "Makanan"
+                                                    ? "bg-blue-300"
+                                                    : ""
+                                            }`
+                                        }
+                                    >
+                                        Makanan
+                                    </button>
+                                    <button
+                                        onClick={onSelect}
+                                        className={
+                                            `cursor-pointer text-sm rounded-lg flex-grow border border-blue-700 p-2 ` +
+                                            `${
+                                                formData.category ===
+                                                "Transportasi"
+                                                    ? "bg-blue-300"
+                                                    : ""
+                                            }`
+                                        }
+                                    >
+                                        Transportasi
+                                    </button>
+                                    <button
+                                        onClick={onSelect}
+                                        className={
+                                            `cursor-pointer text-sm rounded-lg flex-grow border border-blue-700 p-2 ` +
+                                            `${
+                                                formData.category === "Belanja"
+                                                    ? "bg-blue-300"
+                                                    : ""
+                                            }`
+                                        }
+                                    >
+                                        Belanja
+                                    </button>
+                                    <button
+                                        onClick={onSelect}
+                                        className={
+                                            `cursor-pointer text-sm rounded-lg flex-grow border border-blue-700 p-2 ` +
+                                            `${
+                                                formData.category === "Hiburan"
+                                                    ? "bg-blue-300"
+                                                    : ""
+                                            }`
+                                        }
+                                    >
+                                        Hiburan
+                                    </button>
+                                    <button
+                                        onClick={onSelect}
+                                        className={
+                                            `cursor-pointer text-sm rounded-lg flex-grow border border-blue-700 p-2 ` +
+                                            `${
+                                                formData.category === "Gaji"
+                                                    ? "bg-blue-300"
+                                                    : ""
+                                            }`
+                                        }
+                                    >
+                                        Gaji
+                                    </button>
+                                    <button
+                                        onClick={onSelect}
+                                        className={
+                                            `cursor-pointer text-sm rounded-lg flex-grow border border-blue-700 p-2 ` +
+                                            `${
+                                                formData.category === "Lainnya"
+                                                    ? "bg-blue-300"
+                                                    : ""
+                                            }`
+                                        }
+                                    >
+                                        Lainnya
+                                    </button>
+                                </div>
                             </li>
                             <li className="w-full flex items-center justify-between">
                                 <span className="text-lg">Date</span>
                                 <input
                                     placeholder="Category"
-                                    value={formData.date}
+                                    value={
+                                        inputDate
+                                            ? inputDate.toString().split("T")[0]
+                                            : formData.date
+                                    }
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
@@ -234,7 +354,11 @@ export default function TransactionHandler({
                                 <span className="text-lg">description</span>
                                 <input
                                     placeholder="Description"
-                                    value={formData.description}
+                                    value={
+                                        inputDescription
+                                            ? inputDescription
+                                            : formData.description
+                                    }
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
@@ -248,9 +372,13 @@ export default function TransactionHandler({
                         </ul>
                         <button
                             onClick={handleSubmit}
-                            className="cursor-pointer text-white hover:bg-blue-400 bg-blue-500 p-2 rounded-full w-full transition"
+                            className={`cursor-pointer text-white p-2 rounded-full w-full transition ${
+                                isLoading
+                                    ? "pointer-events-none bg-blue-300"
+                                    : "hover:bg-blue-400 bg-blue-500"
+                            }`}
                         >
-                            Submit
+                            {isLoading ? "Submit..." : "Submit"}
                         </button>
                     </div>
                 </div>

@@ -64,11 +64,11 @@ export default function MainPage() {
                             />
                         </div>
                         <div className="flex flex-col justify-center items-start h-full pl-12 gap-2">
-                            <ul className="text-black font-bold text-base md:text-2xl">
-                                <li className="mb-2 mt-2">
+                            <ul className="text-black font-bold md:text-2xl">
+                                <li className="mb-2 mt-2 text-2xl">
                                     User Name : {userData?.name}
                                 </li>
-                                <li className="mb-2 mt-2">
+                                <li className="mb-2 mt-2 text-2xl">
                                     Email : {userData?.email}
                                 </li>
                             </ul>

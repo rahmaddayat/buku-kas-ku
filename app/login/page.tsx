@@ -89,7 +89,7 @@ export default function LoginPage() {
                                     email: e.target.value,
                                 })
                             }
-                            className="p-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0b1f49] text-black"
+                            className="py-3 px-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0b1f49] text-black"
                             required
                         />
 
@@ -104,7 +104,7 @@ export default function LoginPage() {
                                         password: e.target.value,
                                     })
                                 }
-                                className="w-full p-3 pr-12 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0b1f49] text-black"
+                                className="w-full py-3 px-4  pr-12 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0b1f49] text-black"
                                 required
                             />
                             <button
@@ -118,7 +118,7 @@ export default function LoginPage() {
 
                         <button
                             type="submit"
-                            className="bg-[#0b1f49] text-white py-2 rounded-full hover:bg-[#09203f] transition disabled:opacity-50"
+                            className="bg-[#0b1f49] text-white py-3 rounded-full hover:bg-[#09203f] transition disabled:opacity-50"
                             disabled={loading}
                         >
                             {loading ? "Signing in..." : "SIGN IN"}
@@ -128,11 +128,11 @@ export default function LoginPage() {
 
                 <div className="w-1/2 bg-[#0b1f49] text-white flex flex-col items-center justify-center p-10 rounded-l-2xl">
                     <h2 className="text-3xl font-bold mb-4 text-center">
-                        Hello, Friend!
+                        Welcome Back!
                     </h2>
                     <p className="text-sm text-center mb-6">
-                        Enter your personal details and start your journey with
-                        us
+                        To keep connected with us, please login with your
+                        personal info.
                     </p>
                     <a
                         href="/register"

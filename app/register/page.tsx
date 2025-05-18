@@ -30,7 +30,7 @@ export default function RegisterPage() {
         if (userToken) {
             router.push("/dashboard");
         }
-    }, [])
+    }, []);
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -73,10 +73,12 @@ export default function RegisterPage() {
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="w-[900px] h-[500px] bg-white rounded-2xl shadow-xl flex">
                 <div className="w-1/2 bg-[#0b1f49] text-white rounded-l-2xl flex flex-col items-center justify-center p-10">
-                    <h2 className="text-3xl font-bold mb-2">Welcome Back!</h2>
+                    <h2 className="text-3xl font-bold mb-4 text-center">
+                        Hello, Friend!
+                    </h2>
                     <p className="text-sm text-center mb-6">
-                        To keep connected with us, please login with your
-                        personal info.
+                        Enter your personal details and start your journey with
+                        us
                     </p>
                     <a href="/login">
                         <button className="border border-white px-6 py-2 rounded-full hover:bg-white hover:text-[#0b1f49] transition">
@@ -95,7 +97,7 @@ export default function RegisterPage() {
                     >
                         <input
                             type="text"
-                            placeholder="Your name"
+                            placeholder="Full name"
                             value={formData.name}
                             onChange={(e) =>
                                 setFormData({
@@ -103,13 +105,13 @@ export default function RegisterPage() {
                                     name: e.target.value,
                                 })
                             }
-                            className="p-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0b1f49] text-black"
+                            className="py-3 px-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0b1f49] text-black"
                             required
                         />
 
                         <input
                             type="email"
-                            placeholder="example@mail.com"
+                            placeholder="Email"
                             value={formData.email}
                             onChange={(e) =>
                                 setFormData({
@@ -117,14 +119,14 @@ export default function RegisterPage() {
                                     email: e.target.value,
                                 })
                             }
-                            className="p-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0b1f49] text-black"
+                            className="py-3 px-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0b1f49] text-black"
                             required
                         />
 
                         <div className="relative w-full">
                             <input
                                 type={showPassword ? "text" : "password"}
-                                placeholder="Password here"
+                                placeholder="Password"
                                 value={formData.password}
                                 onChange={(e) =>
                                     setFormData({
@@ -132,7 +134,7 @@ export default function RegisterPage() {
                                         password: e.target.value,
                                     })
                                 }
-                                className="w-full p-3 pr-12 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0b1f49] text-black"
+                                className="w-full py-3 px-4 pr-12 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0b1f49] text-black"
                                 required
                             />
                             <button
@@ -143,10 +145,10 @@ export default function RegisterPage() {
                                 {showPassword ? <FiEyeOff /> : <FiEye />}
                             </button>
                         </div>
-                        
+
                         <button
                             type="submit"
-                            className="bg-[#0b1f49] text-white py-2 rounded-full hover:bg-[#09203f] transition disabled:opacity-50"
+                            className="bg-[#0b1f49] text-white py-3 rounded-full hover:bg-[#09203f] transition disabled:opacity-50"
                             disabled={loading}
                         >
                             {loading ? "Registering..." : "SIGN UP"}
