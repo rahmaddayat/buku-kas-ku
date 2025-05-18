@@ -86,7 +86,7 @@ export default function TransactionsPage() {
     return (
         <div className="flex">
             <Navbar />
-            <div className="flex flex-col ml-64 w-full min-h-screen bg-gray-100">
+            <div className="flex flex-col ml-64 w-full min-h-screen bg-gray-100 pb-10">
                 <Header title="Finance Transactions" />
                 <div className="w-full px-8 pt-4 pb-2">
                     <div className="flex justify-center bg-white rounded-lg shadow-sm">

@@ -14,7 +14,7 @@ const ListTransaction = ({
     date: string;
 }) => {
     return (
-        <div className="w-full h-fit py-2 px-4 border border-gray-300 rounded-lg shadow shadow-gray-200 shadow-sm flex flex-row items-center justify-center">
+        <div className="w-full h-fit py-2 px-4 border border-gray-300 rounded-lg shadow shadow-gray-200 shadow-sm hover:shadow-md transition flex flex-row items-center justify-center">
             <div className="h-fit flex-grow">
                 <h1
                     className={`text-lg font-bold ${

@@ -40,6 +40,15 @@ export default function TransactionHandler({
     });
     const [isLoading, setIsLoading] = useState(false);
 
+    const [thisInputAmount, setThisInputAmount] = useState<number>(0);
+    const [thisInputCategory, setThisInputCategory] = useState<string>("");
+    const [thisInputDate, setThisInputDate] = useState<string | Date>(
+        "0000-00-00"
+    );
+    const [thisInputDescription, setThisInputDescription] =
+        useState<string>("");
+    const [thisInputType, setThisInputType] = useState<string>("");
+
     const userToken = localStorage.getItem("token");
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -149,15 +158,21 @@ export default function TransactionHandler({
             ) {
                 setFormData({
                     ...formData,
-                    type: inputType ? inputType : '',
+                    type: inputType ? inputType : "",
                     amount: inputAmount ? inputAmount : 0,
-                    category: inputCategory ? inputCategory : '',
-                    date: inputDate ? inputDate.toString() : '0000-00-00',
-                    description: inputDescription ? inputDescription : '',
+                    category: inputCategory ? inputCategory : "",
+                    date: inputDate ? inputDate.toString() : "0000-00-00",
+                    description: inputDescription ? inputDescription : "",
                 });
             }
+
+            setThisInputAmount(inputAmount || 0);
+            setThisInputCategory(inputCategory || "");
+            setThisInputDate(inputDate || "0000-00-00");
+            setThisInputType(inputType || "");
+            setThisInputDescription(inputDescription || "");
         }
-    }, []);
+    }, [eventType]);
 
     return (
         <>
@@ -202,16 +217,19 @@ export default function TransactionHandler({
                                 <input
                                     placeholder="Amount"
                                     value={
-                                        inputAmount
-                                            ? inputAmount
+                                        thisInputAmount
+                                            ? thisInputAmount
                                             : formData.amount
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) => {
+                                        const value = Number(e.target.value);
+
                                         setFormData({
                                             ...formData,
-                                            amount: Number(e.target.value),
-                                        })
-                                    }
+                                            amount: value,
+                                        });
+                                        setThisInputAmount(value);
+                                    }}
                                     className="rounded-lg border w-[80%] border-black p-2"
                                     type="text"
                                 />
@@ -336,16 +354,21 @@ export default function TransactionHandler({
                                 <input
                                     placeholder="Category"
                                     value={
-                                        inputDate
-                                            ? inputDate.toString().split("T")[0]
+                                        thisInputDate
+                                            ? thisInputDate
+                                                  .toString()
+                                                  .split("T")[0]
                                             : formData.date
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+
                                         setFormData({
                                             ...formData,
-                                            date: e.target.value,
-                                        })
-                                    }
+                                            date: value,
+                                        });
+                                        setThisInputDate(e.target.value);
+                                    }}
                                     className="rounded-lg border w-[80%] border-black p-2"
                                     type="date"
                                 />
@@ -355,16 +378,19 @@ export default function TransactionHandler({
                                 <input
                                     placeholder="Description"
                                     value={
-                                        inputDescription
-                                            ? inputDescription
+                                        thisInputDescription
+                                            ? thisInputDescription
                                             : formData.description
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+
                                         setFormData({
                                             ...formData,
-                                            description: e.target.value,
-                                        })
-                                    }
+                                            description: value,
+                                        });
+                                        setThisInputDescription(value);
+                                    }}
                                     className="rounded-lg border w-[80%] border-black p-2"
                                     type="text"
                                 />

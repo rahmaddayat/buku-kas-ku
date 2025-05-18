@@ -111,7 +111,7 @@ export default function MainPage() {
                     </div>
 
                     <div className="flex flex-col w-full items-center justify-center flex-grow gap-8">
-                        <div className="w-full flex-grow flex flex-col gap-2">
+                        <div className="w-full flex-grow flex flex-col gap-3">
                             {transactions.map((txn) => {
                                 return (
                                     <ListTransaction
@@ -127,7 +127,7 @@ export default function MainPage() {
                         </div>
                         <button
                             onClick={showInputPopup}
-                            className="cursor-pointer bg-[#0b1f49] font-bold py-4 w-full rounded flex items-center justify-center shadow-md hover:scale-102 transition duration-50"
+                            className="cursor-pointer bg-[#0b1f49] font-bold py-4 w-full rounded flex items-center justify-center shadow-md hover:scale-101 transition duration-50"
                         >
                             + Add Transaction
                         </button>
